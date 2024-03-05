@@ -1,6 +1,7 @@
 # OpenSSLを利用して単一ファイルを公開鍵暗号化する
 
 ## アルゴリズム
+
 - RSA 4096bit
 
 実際にはデータをAESで暗号化し、AESのキーをRSAで暗号化する
@@ -8,12 +9,14 @@
 ## 使い方
 
 - ビルドする
-```
+
+```bash
 docker compose build
 ```
 
 - 鍵を作る
-```
+
+```bash
 docker compose run app keygen
 ls my-keys
 ```
@@ -24,7 +27,8 @@ ls my-keys
     - ここでは `pub-keys/foobar.pem` とする
   - 暗号化するファイルは `plain/` 配下に格納しておく
     - ここでは `plain/sample.zip` とする
-```
+
+```bash
 docker compose run app encrypt foobar.pem sample.zip
 ls cipher/
 ```
@@ -32,12 +36,15 @@ ls cipher/
 - 復号する
   - まず暗号化データを取得する
   - データを暗号化してもらうために公開鍵を通知しておく
-```
-cat my-keys/public_key.pem
-```
+
+  ```bash
+  cat my-keys/public_key.pem
+  ```
+
   - 暗号化データは `cipher/` 配下に格納しておく
     - ここでは `cipher/sample.zip.bin` とする
-```
-docker compose run app decrypt sample.zip.bin
-ls plain/
-```
+
+  ```bash
+  docker compose run app decrypt sample.zip.bin
+  ls plain/
+  ```

@@ -10,13 +10,13 @@
 
 - ビルドする
 
-```bash
+```shell
 docker compose build
 ```
 
 - 鍵を作る
 
-```bash
+```shell
 docker compose run app keygen
 ls my-keys
 ```
@@ -28,7 +28,7 @@ ls my-keys
   - 暗号化するファイルは `plain/` 配下に格納しておく
     - ここでは `plain/sample.zip` とする
 
-```bash
+```shell
 docker compose run app encrypt foobar.pem sample.zip
 ls cipher/
 ```
@@ -37,14 +37,14 @@ ls cipher/
   - まず暗号化データを取得する
   - データを暗号化してもらうために公開鍵を通知しておく
 
-  ```bash
+  ```shell
   cat my-keys/public_key.pem
   ```
 
   - 暗号化データは `cipher/` 配下に格納しておく
     - ここでは `cipher/sample.zip.bin` とする
 
-  ```bash
-  docker compose run app decrypt sample.zip.bin
-  ls plain/
-  ```
+```shell
+docker compose run app decrypt sample.zip.bin
+ls plain/
+```

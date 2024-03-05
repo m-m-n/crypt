@@ -1,0 +1,21 @@
+#!/bin/bash
+
+TMPDIR=/tmp/$$
+mkdir -p "${TMPDIR}/key"
+
+FILE_BASE="$(basename "$1" .bin)"
+
+PRIVATE_KEY_FILE="/root/my-keys/private_key.pem"
+CIPHER_FILE="/data/cipher/${FILE_BASE}.bin"
+
+AES_KEY_FILE="${TMPDIR}/key/aes.key"
+
+tar -C "${TMPDIR}" -xf "${CIPHER_FILE}"
+
+KEY="$(ls -1 "${TMPDIR}"/*.key | head -n 1)"
+DATA="$(ls -1 "${TMPDIR}"/*.enc | head -n 1)"
+
+openssl pkeyutl -decrypt -inkey "${PRIVATE_KEY_FILE}" -in "${KEY}" -out "${AES_KEY_FILE}"
+openssl enc -aes-256-cbc -d -pbkdf2 -in "${DATA}" -out "/data/plain/$(basename "${DATA}" .enc)" -pass file:"${AES_KEY_FILE}"
+
+rm -fr "${TMPDIR}"

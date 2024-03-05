@@ -1,0 +1,19 @@
+#!/bin/bash
+
+TMPDIR=/tmp/$$
+mkdir -p "${TMPDIR}/key"
+
+PUBLIC_KEY_FILE="/data/pub-keys/$1"
+FILE_BASE="$(basename "$2")"
+PLAIN_FILE="/data/plain/${FILE_BASE}"
+
+AES_KEY_FILE="${TMPDIR}/key/aes.key"
+
+head -c 32 /dev/urandom > "${AES_KEY_FILE}"
+
+openssl enc -aes-256-cbc -salt -pbkdf2 -in "/data/plain/${FILE_BASE}" -out "${TMPDIR}/${FILE_BASE}.enc" -pass file:"${AES_KEY_FILE}"
+openssl pkeyutl -encrypt -pubin -inkey "${PUBLIC_KEY_FILE}" -in "${AES_KEY_FILE}" -out "${TMPDIR}/${FILE_BASE}.key"
+
+tar -C "${TMPDIR}" -cf "/data/cipher/${FILE_BASE}.bin" "${FILE_BASE}.enc" "${FILE_BASE}.key"
+
+rm -fr "${TMPDIR}"

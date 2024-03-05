@@ -1,0 +1,12 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./plain:/data/plain
+      - ./cipher:/data/cipher
+      - ./pub-keys:/data/pub-keys
+      - ./bin:/root/bin
+      - ./my-keys:/root/my-keys

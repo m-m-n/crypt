@@ -1,0 +1,10 @@
+#!/bin/bash
+
+PRIVATE_KEY_FILE=/root/my-keys/private_key.pem
+PUBLIC_KEY_FILE=/root/my-keys/public_key.pem
+if [ -f "${PRIVATE_KEY_FILE}" ]; then
+  echo "Private key file already exists: ${PRIVATE_KEY_FILE}"
+  exit 1
+fi
+openssl genpkey -algorithm RSA -out "${PRIVATE_KEY_FILE}" -pkeyopt rsa_keygen_bits:4096
+openssl rsa -pubout -in "${PRIVATE_KEY_FILE}" -out "${PUBLIC_KEY_FILE}"
